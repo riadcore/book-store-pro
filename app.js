@@ -6,14 +6,14 @@ const bookRoutes = require('./routes/bookRoutes');
 
 dotenv.config();
 
-// ✅ Must come BEFORE using `app`
-const app = express();
+const app = express(); // ✅ Must be before any use of `app`
 
-// ✅ Middleware
-app.use(cors({ origin: 'https://book-store-pro-front-end.vercel.app', credentials: true }));
+app.use(cors({
+  origin: 'https://book-store-pro-front-end.vercel.app', // 🔗 your frontend URL without slash
+  credentials: true,
+}));
 app.use(express.json());
 
-// ✅ Routes
 app.use('/auth', authRoutes);
 app.use('/books', bookRoutes);
 
