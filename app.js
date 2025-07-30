@@ -6,17 +6,22 @@ const bookRoutes = require('./routes/bookRoutes');
 
 dotenv.config();
 
-const app = express(); // ✅ Must be before any use of `app`
+const app = express();
 
+// ✅ Correct CORS settings for frontend hosted on Vercel
 app.use(cors({
-  origin: 'https://book-store-pro-front-end.vercel.app', // 🔗 your frontend URL without slash
-  credentials: true,
+  origin: 'https://book-store-pro-front-end.vercel.app', // ✅ no trailing slash
+  credentials: true, // Allows cookies, authorization headers, etc.
 }));
+
+// ✅ Middleware
 app.use(express.json());
 
+// ✅ Routes
 app.use('/auth', authRoutes);
 app.use('/books', bookRoutes);
 
+// ✅ Root endpoint
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
