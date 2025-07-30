@@ -1,41 +1,22 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar'; // ✅ Import
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import BookListPage from './pages/BookListPage';
-import AddBookPage from './pages/AddBookPage';
-import PrivateRoute from './components/PrivateRoute'; // ✅ Protected Routes
+// ✅ Correct app.js for Express
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes');
+const bookRoutes = require('./routes/bookRoutes');
 
-function App() {
-  return (
-    <>
-      <Navbar /> {/* ✅ Navbar always visible */}
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+dotenv.config();
 
-        {/* ✅ Protected Routes */}
-        <Route
-          path="/books"
-          element={
-            <PrivateRoute>
-              <BookListPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/add-book"
-          element={
-            <PrivateRoute>
-              <AddBookPage />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </>
-  );
-}
+const app = express();
 
-export default App;
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(express.json());
+
+app.use('/auth', authRoutes);
+app.use('/books', bookRoutes);
+
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+module.exports = app;
